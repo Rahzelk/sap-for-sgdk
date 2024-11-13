@@ -59,7 +59,7 @@ void SAP_insertEntity(Entity* entity)
 void SAP_init()
 {
     edgeList.edgeCount = 0; 
-    sweepCount = 0;
+    sweepCount = SORT_FREQUENCY;
 }
 
 void SAP_sort() 
@@ -101,9 +101,9 @@ void SAP_sort()
 
 void SAP_sweep() 
 {
-    if(sweepCount++ == SORT_FREQUENCY)
+    if(--sweepCount < 1)
     {
-        sweepCount = 0;
+        sweepCount = SORT_FREQUENCY;
         SAP_sort();
     } 
 

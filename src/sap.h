@@ -44,14 +44,15 @@
 
 
 //The maximum number of edges that can be take into account
-// note : 1 entity = 2 edges so 72 edges = 36 entities max.
-#define MAX_EDGES 72 
+// note : 1 entity = 2 edges so 80 edges = 40 entities max.
+#define MAX_EDGES 80 
 
 //The maximum number of entity that can be touching each other at the same time
 // note : this concerns entity on the same X axis, but probably distributed on the Y axis.
-#define MAX_ENTITY_TOUCHING 12 
+#define MAX_ENTITY_TOUCHING 20 
 
 // This is how much sorting we do, 1 = every sweep , 2= every two sweep, and so on...
+// the lower, the more accurate will be the collision detection (but more CPU !)
 #define SORT_FREQUENCY 2
 
 
