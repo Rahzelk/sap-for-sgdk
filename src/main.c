@@ -4,17 +4,16 @@
 
 
 // simply comment this to test without Sweep And Prune
-//#define SAP_TEST
+#define SAP_TEST
 
 // adjust the number of sprites for a custom benchmark
-#define NB_SPRITES 30
+#define NB_SPRITES 10
 
 
 // will store our sprites 
 Entity listEtt[NB_SPRITES];
 
-
-
+	
 //small function to get a number between -2 and  2, but not 0
 s8 rand() {
     s8 randomNum;
@@ -122,9 +121,10 @@ void checkCollisions()
 }
 
 
-
+	
 int main(bool resetType) 
 { 
+	
 	//Soft resets don't clear RAM, this can bring some bugs so we hard reset every time we detect a soft reset
 	if (!resetType)
 	    SYS_hardReset();
@@ -136,6 +136,8 @@ int main(bool resetType)
     
 
 	#ifdef	SAP_TEST
+		
+    	SAP_sort(); // sort edges before sweeping
 		SAP_init();
 	#endif
 
@@ -143,6 +145,7 @@ int main(bool resetType)
 
     SPR_update();
     SYS_doVBlankProcess();
+
 
     while(1)
     {      

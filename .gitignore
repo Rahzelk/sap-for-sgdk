@@ -11,3 +11,4 @@ out/src/main.d
 out/src/main.o
 out/src/sap.d
 out/src/sap.o
+src/main.c

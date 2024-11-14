@@ -51,7 +51,11 @@
 // note : this concerns entity on the same X axis, but probably distributed on the Y axis.
 #define MAX_ENTITY_TOUCHING 12 
 
+// This is how much sorting we do, 1 = every sweep , 2= every two sweep, and so on...
+#define SORT_FREQUENCY 2
 
+
+s8 sweepCount;
 
 // simple AABB ( Axis Aligned Bounding Box )
 typedef struct AABB{

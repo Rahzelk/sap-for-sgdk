@@ -6,7 +6,6 @@
 //maintained list of edges
 EdgeList edgeList; 
 
-
 void SAP_insertEntity(Entity* entity)
 {
     if (edgeList.edgeCount + 2 > MAX_EDGES) 
@@ -14,19 +13,44 @@ void SAP_insertEntity(Entity* entity)
         #ifdef DEBUG
             KLog("Error: Too many edges to sort");
         #endif
-
         return;
     }
 
-    // create new edge
+    // Créer une nouvelle edge pour l'entité
     Edge newEdge;
     newEdge.entity = entity;
 
-    // insert two edges for the entity
-    for(u8 i = 0; i < 2; i++) 
+    // Insérer deux edges pour l'entité (un pour le côté gauche et un pour le côté droit)
+    for (u8 i = 0; i < 2; i++) 
     {
-        newEdge.isLeft = i; // will be alternately 0 or 1 == true or false
-        edgeList.edges[edgeList.edgeCount++] = newEdge;    
+        newEdge.isLeft = i;  // 0 pour le bord gauche, 1 pour le bord droit
+        
+        // Déterminer la position de la nouvelle edge (selon le critère de tri)
+        u16 newPosition = (newEdge.isLeft) ? newEdge.entity->currentBounds.min.x : newEdge.entity->currentBounds.max.x;
+        
+        // Trouver l'endroit où insérer la nouvelle edge
+        u8 insertIndex = edgeList.edgeCount;
+        for (u8 j = 0; j < edgeList.edgeCount; j++) 
+        {
+            // Comparer la position de la nouvelle edge avec celle des edges existantes
+            u16 currentPosition = (edgeList.edges[j].isLeft) ? edgeList.edges[j].entity->currentBounds.min.x : edgeList.edges[j].entity->currentBounds.max.x;
+            
+            if (newPosition < currentPosition) 
+            {
+                insertIndex = j;
+                break;
+            }
+        }
+        
+        // Décaler les edges existantes pour faire de la place à la nouvelle edge
+        for (u8 j = edgeList.edgeCount; j > insertIndex; j--) 
+        {
+            edgeList.edges[j] = edgeList.edges[j - 1];
+        }
+
+        // Insérer la nouvelle edge à la bonne position
+        edgeList.edges[insertIndex] = newEdge;
+        edgeList.edgeCount++;
     }
 }
 
@@ -35,46 +59,37 @@ void SAP_insertEntity(Entity* entity)
 void SAP_init()
 {
     edgeList.edgeCount = 0; 
+    sweepCount = 0;
 }
-
-
 
 void SAP_sort() 
 {
     for (u8 i = 1; i < edgeList.edgeCount; i++)
     {   
         Edge currentEdge = edgeList.edges[i];
+        u16 currentX = currentEdge.isLeft 
+            ? currentEdge.entity->currentBounds.min.x 
+            : currentEdge.entity->currentBounds.max.x;
 
         s8 j = i - 1;
-        u8 k = i;
 
-        // compute X corresponding to the current edge
-        u16 currentX = currentEdge.isLeft ? currentEdge.entity->currentBounds.min.x 
-                                            : currentEdge.entity->currentBounds.max.x;
+        // Décale les éléments plus grands vers la droite
+        while (j >= 0)
+        {
+            Edge* prevEdge = &edgeList.edges[(u8)j];
+            u16 prevX = prevEdge->isLeft 
+                ? prevEdge->entity->currentBounds.min.x 
+                : prevEdge->entity->currentBounds.max.x;
 
-        // shift greater edges to the right
-        while (j >= 0) 
-        {   
-            u8 c = (u8)j;
-            
-            u16 edgeX = edgeList.edges[c].isLeft ? edgeList.edges[c].entity->currentBounds.min.x 
-                                        : edgeList.edges[c].entity->currentBounds.max.x;
+            if (prevX <= currentX) break;
 
-            if (edgeX > currentX)
-            {
-                edgeList.edges[c + 1] = edgeList.edges[c];
-                k = j;
-            }
-            else
-            {
-                break; // no need to search further
-            }
-        
+            // Décale l'élément courant vers la droite
+            edgeList.edges[j + 1] = *prevEdge;
             j--;
         }
 
-        // insert current edge
-        edgeList.edges[k] = currentEdge;        
+        // Place `currentEdge` à la bonne position
+        edgeList.edges[j + 1] = currentEdge;
     }
 
     #ifdef DEBUG_EDGE_SORT
@@ -83,10 +98,15 @@ void SAP_sort()
 }
 
 
+
 void SAP_sweep() 
 {
-    SAP_sort(); // sort edges before sweeping
-    
+    if(sweepCount++ == SORT_FREQUENCY)
+    {
+        sweepCount = 0;
+        SAP_sort();
+    } 
+
     // this will hold the entities that are currently touching each other
     Entity* touching[MAX_ENTITY_TOUCHING];
     u8 touchingCount = 0;
