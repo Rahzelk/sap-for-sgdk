@@ -5,6 +5,7 @@
 
 //maintained list of edges
 EdgeList edgeList; 
+s8 sweepCount;
 
 void SAP_insertEntity(Entity* entity)
 {

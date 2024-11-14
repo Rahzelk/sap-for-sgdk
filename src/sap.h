@@ -56,7 +56,7 @@
 #define SORT_FREQUENCY 2
 
 
-s8 sweepCount;
+
 
 // simple AABB ( Axis Aligned Bounding Box )
 typedef struct AABB{
