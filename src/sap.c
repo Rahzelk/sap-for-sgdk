@@ -16,23 +16,23 @@ void SAP_insertEntity(Entity* entity)
         return;
     }
 
-    // Créer une nouvelle edge pour l'entité
+    // create new edge
     Edge newEdge;
     newEdge.entity = entity;
 
-    // Insérer deux edges pour l'entité (un pour le côté gauche et un pour le côté droit)
+    // insert the entity two egdes of the Entity (left and right)
     for (u8 i = 0; i < 2; i++) 
     {
-        newEdge.isLeft = i;  // 0 pour le bord gauche, 1 pour le bord droit
+        newEdge.isLeft = i;  // 0 = left, 1 = right
         
-        // Déterminer la position de la nouvelle edge (selon le critère de tri)
+        // newEdge position
         u16 newPosition = (newEdge.isLeft) ? newEdge.entity->currentBounds.min.x : newEdge.entity->currentBounds.max.x;
         
-        // Trouver l'endroit où insérer la nouvelle edge
+        // find where to insert this edge
         u8 insertIndex = edgeList.edgeCount;
         for (u8 j = 0; j < edgeList.edgeCount; j++) 
         {
-            // Comparer la position de la nouvelle edge avec celle des edges existantes
+            // compare newEdge position and the current fetched position
             u16 currentPosition = (edgeList.edges[j].isLeft) ? edgeList.edges[j].entity->currentBounds.min.x : edgeList.edges[j].entity->currentBounds.max.x;
             
             if (newPosition < currentPosition) 
@@ -42,13 +42,13 @@ void SAP_insertEntity(Entity* entity)
             }
         }
         
-        // Décaler les edges existantes pour faire de la place à la nouvelle edge
+        // shift edges 
         for (u8 j = edgeList.edgeCount; j > insertIndex; j--) 
         {
             edgeList.edges[j] = edgeList.edges[j - 1];
         }
 
-        // Insérer la nouvelle edge à la bonne position
+        // insert newEdge
         edgeList.edges[insertIndex] = newEdge;
         edgeList.edgeCount++;
     }
@@ -73,7 +73,7 @@ void SAP_sort()
 
         s8 j = i - 1;
 
-        // Décale les éléments plus grands vers la droite
+        // shift greater Edges
         while (j >= 0)
         {
             Edge* prevEdge = &edgeList.edges[(u8)j];
@@ -83,12 +83,12 @@ void SAP_sort()
 
             if (prevX <= currentX) break;
 
-            // Décale l'élément courant vers la droite
+            // current edge is shifted to the right
             edgeList.edges[j + 1] = *prevEdge;
             j--;
         }
 
-        // Place `currentEdge` à la bonne position
+        // currentEdge is at the good place
         edgeList.edges[j + 1] = currentEdge;
     }
 

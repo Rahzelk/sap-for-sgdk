@@ -12,3 +12,5 @@ out/src/main.o
 out/src/sap.d
 out/src/sap.o
 src/main.c
+test/sap.c
+test/sap.h
