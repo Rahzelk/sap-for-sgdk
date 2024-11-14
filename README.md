@@ -1,18 +1,33 @@
-This is a Sweep and Prune algorithm for collision detection.
-Developped for a Megadrive homebrew game using  SGDK devkit.
+# Sweep and Prune Algorithm for Collision Detection
 
-Thanks goes to https://leanrada.com/notes/sweep-and-prune/
-a must read for Sweep And Prune understanding !
+This is a **Sweep and Prune** algorithm for collision detection, developed for a Megadrive homebrew game using the **SGDK** devkit.
 
-This Algorithm show some benefits above 15 sprites collisions
-Under 15 sprites, you'd better go with classic AABB test !
+## Acknowledgments
 
-As of november 2024, the benchmark shows that :
+Thanks to [Leanrada's Notes on Sweep and Prune](https://leanrada.com/notes/sweep-and-prune/), a must-read for understanding the Sweep and Prune algorithm!
 
-At 10 sprites, AABB => 20% CPU and Sweep And Prune is 23% CPU.
-At 20 sprites, AABB => 50% CPU and Sweep And Prune is 45% CPU.
-At 30 sprites, AABB => 90% CPU and Sweep And Prune is 65% CPU.
-At 40 sprites, AABB => 140% CPU and Sweep And Prune is 85% CPU.
+## Performance Insights
 
-Probably some improvments can be done for this SAP algorithm !
+This algorithm shows some benefits when handling more than **15 sprites**. For fewer than 15 sprites, it's recommended to stick with the classic **AABB (Axis-Aligned Bounding Box)** test.
 
+### Benchmark Results (as of November 2024)
+
+- **At 10 sprites:**
+  - AABB => **20% CPU**
+  - Sweep and Prune => **23% CPU**
+
+- **At 20 sprites:**
+  - AABB => **50% CPU**
+  - Sweep and Prune => **45% CPU**
+
+- **At 30 sprites:**
+  - AABB => **90% CPU**
+  - Sweep and Prune => **65% CPU**
+
+- **At 40 sprites:**
+  - AABB => **140% CPU**
+  - Sweep and Prune => **85% CPU**
+
+## Possible Improvements
+
+There are likely improvements that can be made to the **Sweep and Prune** algorithm for better performance, especially by using a BST instead of a linked list, and also in optimizing the sorting algorithm.
