@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Sweep and Prune Algorithm for Collision Detection
 
 This is a **Sweep and Prune** algorithm for collision detection, developed for a Megadrive homebrew game using the **SGDK** devkit.
