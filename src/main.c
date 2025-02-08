@@ -7,7 +7,7 @@
 #define SAP_TEST
 
 // adjust the number of sprites for a custom benchmark
-#define NB_SPRITES 10
+#define NB_SPRITES 40
 
 
 // will store our sprites 
@@ -15,7 +15,7 @@ Entity listEtt[NB_SPRITES];
 
 	
 //small function to get a number between -2 and  2, but not 0
-s8 rand() {
+s8 randTwo() {
     s8 randomNum;
     do {
         randomNum = (random() % 3) - 2; 
@@ -23,6 +23,13 @@ s8 rand() {
     return randomNum;
 }
 
+s8 rand(u8 max) {
+    s8 randomNum;
+    do {
+        randomNum = (random() % max) - (max-1); 
+    } while (randomNum == 0);           
+    return randomNum;
+}
 
 // classic check for Axis Aligned Bounded Box collision
 bool checkAABBCollision(AABB a, AABB b) {
@@ -33,32 +40,34 @@ bool checkAABBCollision(AABB a, AABB b) {
 // just doing a rebound when collisioning
 void handleCollision(Entity * ett1, Entity * ett2)
 {
-	s16 move;
-	
-	move = ett1->move.x;
-	ett1->move.x = ett2->move.x;
-	ett2->move.x = move;
+		//ett2->move.x = 	-ett2->move.x;
+		ett2->move.y = 	(-1*ett2->move.y);
+		//ett1->move.x = 	-ett1->move.x;
+		ett1->move.y = (-1*ett1->move.y);
+}
 
-	move = ett1->move.y;
-	ett1->move.y = ett2->move.y;
-	ett2->move.y = move;
+void createDonut(u8 index, u8 PAL, u8 type, Vect2D_s16 move)
+{
+	listEtt[index].sprite  = SPR_addSprite(&donut, (random() % 15)*16,  (random() % 10)*16, TILE_ATTR(PAL, 1, FALSE, FALSE));
+	listEtt[index].currentBounds = (AABB){
+										{listEtt[index].sprite->x, listEtt[index].sprite->y},
+										{listEtt[index].sprite->x + 16, listEtt[index].sprite->y+16}
+									};
+	listEtt[index].type = type;
+	listEtt[index].move = move;
+
+	#ifdef	SAP_TEST
+		SAP_insertEntity(&listEtt[index]);
+	#endif
 }
 
 void initSpriteList()
 {
-	for (u8 i =0; i < NB_SPRITES; i++)
+	createDonut(0, PAL3, ENTITY_COLLIDE, (Vect2D_s16){2,0});
+
+	for (u8 i =1; i < NB_SPRITES; i++)
 	{
-		listEtt[i].sprite  = SPR_addSprite(&donut, (random() % 15)*16,  (random() % 10)*16, TILE_ATTR(PAL0, 1, FALSE, FALSE));
-		listEtt[i].currentBounds = (AABB){
-											{listEtt[i].sprite->x, listEtt[i].sprite->y},
-											{listEtt[i].sprite->x + 16, listEtt[i].sprite->y+16}
-										};
-
-		listEtt[i].move = (Vect2D_s16){rand(),rand()};
-
-		#ifdef	SAP_TEST
-			SAP_insertEntity(&listEtt[i]);
-		#endif
+		createDonut(i, PAL0, ENTITY_NOT_COLLIDE, (Vect2D_s16){randTwo(),randTwo()});
 	}
 }
 
@@ -105,11 +114,14 @@ void checkCollisions()
 	#ifndef	SAP_TEST
 		for (u8 i =0; i < NB_SPRITES; i++)
 		{
-			for(u8 j=i; j<NB_SPRITES; j++)
+			if(listEtt[i].type)
 			{
-				if(checkAABBCollision(listEtt[i].currentBounds, listEtt[j].currentBounds))
+				for(u8 j=0; j<NB_SPRITES; j++)
 				{
-					handleCollision(&listEtt[i], &listEtt[j]);
+					if(j!=i && checkAABBCollision(listEtt[i].currentBounds, listEtt[j].currentBounds))
+					{
+						handleCollision(&listEtt[i], &listEtt[j]);
+					}
 				}
 			}
 		}
@@ -136,8 +148,6 @@ int main(bool resetType)
     
 
 	#ifdef	SAP_TEST
-		
-    	SAP_sort(); // sort edges before sweeping
 		SAP_init();
 	#endif
 

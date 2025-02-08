@@ -56,6 +56,11 @@
 #define SORT_FREQUENCY 2
 
 
+//define a entity->type : used later to compute or not a collision 
+//(if two "not colliding" object intersects, we wont handle their collision !)
+#define ENTITY_COLLIDE      1
+#define ENTITY_NOT_COLLIDE  0
+
 
 
 // simple AABB ( Axis Aligned Bounding Box )
@@ -71,6 +76,7 @@ typedef struct Entity
     Sprite * sprite;
     Vect2D_s16 move;       
     AABB currentBounds;
+    u8 type;
 } Entity;
 
 
@@ -85,7 +91,6 @@ typedef struct Edge {
     Entity* entity;
     u8 isLeft; // TRUE if this edge is the left edge of the entity
 } Edge;
-
 
 /**
  * \brief Represents a list of edges for the Sweep and Prune (SAP) algorithm.
@@ -161,15 +166,22 @@ void SAP_sort();
 
 
 /**
+ * \brief Clean the edgeList by removing NULL values
+ *
+ * \note This function is called internally by the SAP_sort() function.
+ *
+ */
+void SAP_clean();
+
+
+/**
 * \brief Removes an entity from the edge list for the Sweep and Prune algorithm.
 * This function removes the two edges associated with the given entity from the edge list.
-* The edges are identified by their entity pointer and the function shifts the remaining edges to fill the gap.
+* The edges are identified by their entity pointer are replaced with NULL.
 *
 * \param entity A pointer to the entity to be removed.
+* \note also see SAP_clean
 *
-* \note The function does not check if the entity is in fact present in the edge list
-* \note The function does not deallocate memory for the entity or any other associated resources.
-* It only removes the entity from the edge list for collision detection.
 */
 void SAP_removeEntity(Entity* entity);
 
