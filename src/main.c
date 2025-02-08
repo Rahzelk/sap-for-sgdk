@@ -67,7 +67,7 @@ void initSpriteList()
 
 	for (u8 i =1; i < NB_SPRITES; i++)
 	{
-		createDonut(i, PAL0, ENTITY_NOT_COLLIDE, (Vect2D_s16){randTwo(),randTwo()});
+		createDonut(i, PAL0, ENTITY_COLLIDE, (Vect2D_s16){randTwo(),randTwo()});
 	}
 }
 
