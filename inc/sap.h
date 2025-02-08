@@ -69,7 +69,6 @@ typedef struct Entity
     Sprite * sprite;
     Vect2D_s16 move;       
     AABB currentBounds;
-    u8 type;
 } Entity;
 
 
