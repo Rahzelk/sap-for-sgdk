@@ -9,7 +9,7 @@ Thanks to [Leanrada's Notes on Sweep and Prune](https://leanrada.com/notes/sweep
 
 ## Performance Insights
 
-This algorithm shows some benefits when handling more than **10 sprites**. For fewer sprites, it's recommended to stick with the classic **AABB (Axis-Aligned Bounding Box)** test.
+This algorithm shows some benefits when handling more than **20 sprites**. For fewer sprites, it's recommended to stick with the classic **AABB (Axis-Aligned Bounding Box)** test.
 
 ### Benchmark Results (as of November 2024)
 
@@ -26,9 +26,13 @@ This algorithm shows some benefits when handling more than **10 sprites**. For f
   - Sweep and Prune => **60% CPU**
 
 - **At 40 sprites:**
-  - AABB => **140% CPU**
-  - Sweep and Prune => **80% CPU**
+  - AABB => **170% CPU**
+  - Sweep and Prune => **90% CPU**
 
 ## Possible Improvements
 
-There are likely improvements that can be made to the **Sweep and Prune** algorithm for better performance, especially by using a BST instead of a linked list, and also in optimizing the sorting algorithm.
+There are likely improvements that can be made to this **Sweep and Prune** algorithm for better performance.
+Tried with a BST, tried with a double-linked list... so far it didn't helped, and I won't explore anymore other options for now.  
+
+Probably optimization still remain in the core algorithm, this I maybe have a look at.
+
