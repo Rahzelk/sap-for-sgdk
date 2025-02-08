@@ -11,23 +11,26 @@ Thanks to [Leanrada's Notes on Sweep and Prune](https://leanrada.com/notes/sweep
 
 This algorithm shows some benefits when handling more than **20 sprites**. For fewer sprites, it's recommended to stick with the classic **AABB (Axis-Aligned Bounding Box)** test.
 
-### Benchmark Results (as of January 2025)
+Note : the benchmark results bellow can vary drastically depending on the complexity of your collision handling function. 
+The more complex handling functions will observe a greater benefit to the SAP algorithm.
+
+### Benchmark Results (as of January 2025, with a very simple collision handling)
 
 - **At 10 sprites:**
-  - AABB => **20% CPU**
-  - Sweep and Prune => **20% CPU**
+  - AABB => **23% CPU**
+  - Sweep and Prune => **23% CPU**
 
 - **At 20 sprites:**
-  - AABB => **50% CPU**
-  - Sweep and Prune => **40% CPU**
+  - AABB => **53% CPU**
+  - Sweep and Prune => **43% CPU**
 
 - **At 30 sprites:**
-  - AABB => **90% CPU**
-  - Sweep and Prune => **60% CPU**
+  - AABB => **95% CPU**
+  - Sweep and Prune => **65% CPU**
 
 - **At 40 sprites:**
-  - AABB => **170% CPU**
-  - Sweep and Prune => **90% CPU**
+  - AABB => **148% CPU**
+  - Sweep and Prune => **85% CPU**
 
 ## Possible Improvements
 
