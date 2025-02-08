@@ -184,14 +184,9 @@ void SAP_sweep()
                 #if SAP_DEBUG   
                     KLog_U3("---------- j= ", j, " *touching[j] : ", *touching[j], " currentEdge->entity : ",  currentEntity);                  
                 #endif
-                
-                
-                u8 collisionHappen = currentEntity->type || (*touching[j])->type;
-
-                if( 
-                 collisionHappen
-                && currentEntity->currentBounds.min.y < (*touching[j])->currentBounds.max.y 
-                && currentEntity->currentBounds.max.y > (*touching[j])->currentBounds.min.y )
+            
+                if(    currentEntity->currentBounds.min.y < (*touching[j])->currentBounds.max.y 
+                    && currentEntity->currentBounds.max.y > (*touching[j])->currentBounds.min.y )
                 {
                     #if DEBUG   
                         KLog_U2("Collision ett1 : ", current->entity, " ett2 : " , (*touching[j]));

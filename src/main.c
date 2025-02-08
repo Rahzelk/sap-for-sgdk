@@ -4,7 +4,7 @@
 
 
 // simply comment this to test without Sweep And Prune
-#define SAP_TEST
+//#define SAP_TEST
 
 // adjust the number of sprites for a custom benchmark
 #define NB_SPRITES 40
@@ -40,34 +40,33 @@ bool checkAABBCollision(AABB a, AABB b) {
 // just doing a rebound when collisioning
 void handleCollision(Entity * ett1, Entity * ett2)
 {
-		//ett2->move.x = 	-ett2->move.x;
-		ett2->move.y = 	(-1*ett2->move.y);
-		//ett1->move.x = 	-ett1->move.x;
-		ett1->move.y = (-1*ett1->move.y);
+		ett2->move.x = -ett2->move.x;
+		ett2->move.y = -ett2->move.y;
+		ett1->move.x = -ett1->move.x;
+		ett1->move.y = -ett1->move.y;		
 }
 
-void createDonut(u8 index, u8 PAL, u8 type, Vect2D_s16 move)
+void createDonut(u8 index, u8 PAL, Vect2D_s16 move)
 {
 	listEtt[index].sprite  = SPR_addSprite(&donut, (random() % 15)*16,  (random() % 10)*16, TILE_ATTR(PAL, 1, FALSE, FALSE));
 	listEtt[index].currentBounds = (AABB){
 										{listEtt[index].sprite->x, listEtt[index].sprite->y},
 										{listEtt[index].sprite->x + 16, listEtt[index].sprite->y+16}
 									};
-	listEtt[index].type = type;
 	listEtt[index].move = move;
 
-	#ifdef	SAP_TEST
+#ifdef	SAP_TEST
 		SAP_insertEntity(&listEtt[index]);
-	#endif
+#endif
 }
 
 void initSpriteList()
 {
-	createDonut(0, PAL3, ENTITY_COLLIDE, (Vect2D_s16){2,0});
+	createDonut(0, PAL3, (Vect2D_s16){2,0});
 
 	for (u8 i =1; i < NB_SPRITES; i++)
 	{
-		createDonut(i, PAL0, ENTITY_COLLIDE, (Vect2D_s16){randTwo(),randTwo()});
+		createDonut(i, PAL0, (Vect2D_s16){randTwo(),randTwo()});
 	}
 }
 
@@ -103,7 +102,7 @@ void updateSpritePosition()
 		listEtt[i].currentBounds = (AABB){
 											{listEtt[i].sprite->x, listEtt[i].sprite->y},
 											{listEtt[i].sprite->x + 16, listEtt[i].sprite->y+16}
-										};		
+										};
 		
 	}		
 }
@@ -111,25 +110,22 @@ void updateSpritePosition()
 
 void checkCollisions()
 {
-	#ifndef	SAP_TEST
+#ifndef	SAP_TEST
 		for (u8 i =0; i < NB_SPRITES; i++)
 		{
-			if(listEtt[i].type)
+			for(u8 j=i; j<NB_SPRITES; j++)
 			{
-				for(u8 j=0; j<NB_SPRITES; j++)
+				if(checkAABBCollision(listEtt[i].currentBounds, listEtt[j].currentBounds))
 				{
-					if(j!=i && checkAABBCollision(listEtt[i].currentBounds, listEtt[j].currentBounds))
-					{
-						handleCollision(&listEtt[i], &listEtt[j]);
-					}
+					handleCollision(&listEtt[i], &listEtt[j]);
 				}
 			}
 		}
-	#endif	
+#endif	
 
-	#ifdef	SAP_TEST
+#ifdef	SAP_TEST
 		SAP_sweep();
-	#endif
+#endif
 }
 
 

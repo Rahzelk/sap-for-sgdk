@@ -56,13 +56,6 @@
 #define SORT_FREQUENCY 2
 
 
-//define a entity->type : used later to compute or not a collision 
-//(if two "not colliding" object intersects, we wont handle their collision !)
-#define ENTITY_COLLIDE      1
-#define ENTITY_NOT_COLLIDE  0
-
-
-
 // simple AABB ( Axis Aligned Bounding Box )
 typedef struct AABB{
 	Vect2D_u16 min;
