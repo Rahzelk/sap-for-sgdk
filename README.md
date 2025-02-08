@@ -11,7 +11,7 @@ Thanks to [Leanrada's Notes on Sweep and Prune](https://leanrada.com/notes/sweep
 
 This algorithm shows some benefits when handling more than **20 sprites**. For fewer sprites, it's recommended to stick with the classic **AABB (Axis-Aligned Bounding Box)** test.
 
-### Benchmark Results (as of November 2024)
+### Benchmark Results (as of January 2025)
 
 - **At 10 sprites:**
   - AABB => **20% CPU**
